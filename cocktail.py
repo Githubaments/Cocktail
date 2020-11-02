@@ -5,6 +5,7 @@ import requests
 import os
 
 api = (os.environ.get('api_key'))
+st.beta_set_page_config(page_title='Drink Recommender')
 
 
 
@@ -189,7 +190,7 @@ elif radio == 'Search by Ingredients':
                 st.stop()
         get_drinks(cocktails)
 
-    elif radio == 'Newest Cocktails':
+elif radio == 'Newest Cocktails':
     cocktails = new_drinks()
     get_drinks(cocktails)
         
