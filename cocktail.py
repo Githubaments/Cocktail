@@ -174,7 +174,7 @@ elif radio == 'Search by Ingredients':
     user_choice = st.multiselect('Choose your ingredients:', ingredients, [])
 
     my_expander = st.beta_expander(' ')
-    mode = my_expander.radio('Search Mode', ('Drink must contain all ingredients','Return drinks with any combinations of ingredients (slower)'))
+    mode = my_expander.radio('Search Mode', ('Drink must contain all ingredients','Return drinks with any combination of ingredients (slower)'))
     non_alcoholic = my_expander.radio('Non-Alcoholic Only', ('Yes','No'),index=1)
 
     if len(user_choice) != 0:
