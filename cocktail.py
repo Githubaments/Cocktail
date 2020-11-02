@@ -144,12 +144,24 @@ def popular():
 
     return cocktails
 
+def new_drinks():
+    f = f"https://www.thecocktaildb.com/api/json/v2/{api}/latest.php"
+    data = json.loads(requests.get(f).text)
+
+    cocktails = []
+
+    for item in (data["drinks"]):
+        cocktails.append(item['idDrink'])
+
+    return cocktails
+
+
 
 st.header("Shane’s Lovely Big Time Drink Recommender")
 
 ingredients = get_ingredient_list()
 
-radio = st.radio('', ('Search by Ingredients','Search by Cocktail Name', 'Just Show Me Some Popular Cocktails'))
+radio = st.radio('', ('Search by Ingredients','Search by Cocktail Name', 'Newest Cocktails','Just Show Me Some Popular Cocktails'))
 
 if radio == 'Search by Cocktail Name':
     user_text = st.text_input('Cocktail Search', value='', max_chars=None, key=None, type='default')
@@ -177,6 +189,10 @@ elif radio == 'Search by Ingredients':
                 st.stop()
         get_drinks(cocktails)
 
+    elif radio == 'Newest Cocktails':
+    cocktails = new_drinks()
+    get_drinks(cocktails)
+        
 else:
     cocktails = popular()
     get_drinks(cocktails)
