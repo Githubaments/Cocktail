@@ -2,9 +2,8 @@ import itertools
 import json
 import streamlit as st
 import requests
-import config
 
-api = config.api_key
+api = api_key
 
 
 def all_combinations(any_list):
