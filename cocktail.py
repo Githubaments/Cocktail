@@ -158,7 +158,7 @@ def new_drinks():
 
 
 
-st.header("Shane’s Lovely Big Time Drink Recommender")
+st.header("Shane’s Drink Recommender")
 
 ingredients = get_ingredient_list()
 
