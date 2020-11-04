@@ -8,19 +8,19 @@ api = (os.environ.get('api_key'))
 st.set_page_config(page_title='Drink Recommender')
 
 
-
 def all_combinations(any_list):
     return itertools.chain.from_iterable(
         itertools.combinations(any_list, i + 1)
         for i in range(len(any_list)))
+
 
 def all_ingredients(x):
     my_combinations = list(all_combinations(x))
 
     cocktails = []
     for item in my_combinations:
-        test_ingredients = ','.join(map(str, item))
-        f = f"https://www.thecocktaildb.com/api/json/v2/{api}/filter.php?i="+test_ingredients
+        all_ingredients = ','.join(map(str, item))
+        f = f"https://www.thecocktaildb.com/api/json/v2/{api}/filter.php?i=" + all_ingredients
         data = json.loads(requests.get(f).text)
 
         for item in (data["drinks"]):
@@ -30,12 +30,13 @@ def all_ingredients(x):
             except Exception:
                 pass
 
-    return(list(set(cocktails)))
+    return (list(set(cocktails)))
+
 
 def strict_ingredients(x):
     user_ingredients = ','.join(map(str, x))
 
-    f = f"https://www.thecocktaildb.com/api/json/v2/{api}/filter.php?i="+user_ingredients
+    f = f"https://www.thecocktaildb.com/api/json/v2/{api}/filter.php?i=" + user_ingredients
     data = json.loads(requests.get(f).text)
 
     cocktails = []
@@ -50,12 +51,12 @@ def strict_ingredients(x):
         st.write("Sorry we can't find a cocktail with these ingredients.")
         st.stop()
 
-    return(cocktails)
+    return (cocktails)
+
 
 def get_drinks(cocktails):
-
     for item in cocktails:
-        f_cocktails = f"https://www.thecocktaildb.com/api/json/v2/{api}/lookup.php?i="+item
+        f_cocktails = f"https://www.thecocktaildb.com/api/json/v2/{api}/lookup.php?i=" + item
         r_cocktails = json.loads(requests.get(f_cocktails).text)
 
         st.image(r_cocktails['drinks'][0]['strDrinkThumb'])
@@ -66,7 +67,6 @@ def get_drinks(cocktails):
             b = 'strIngredient' + str(item)
             a = r_cocktails['drinks'][0][a]
             b = r_cocktails['drinks'][0][b]
-
 
             if a != None and b != None:
                 try:
@@ -91,7 +91,8 @@ def get_drinks(cocktails):
 
     return
 
-@st.cache(suppress_st_warning=True,show_spinner=False,allow_output_mutation=True)
+
+@st.cache(suppress_st_warning=True, show_spinner=False, allow_output_mutation=True)
 def filer_alcholic(cocktails):
     f = f"https://www.thecocktaildb.com/api/json/v2/{api}/filter.php?a=Non_Alcoholic"
     data = json.loads(requests.get(f).text)
@@ -105,7 +106,8 @@ def filer_alcholic(cocktails):
 
     return cocktails
 
-@st.cache(suppress_st_warning=True,show_spinner=False,allow_output_mutation=True)
+
+@st.cache(suppress_st_warning=True, show_spinner=False, allow_output_mutation=True)
 def get_ingredient_list():
     f = f"https://www.thecocktaildb.com/api/json/v2/{api}/list.php?i=list"
     data = requests.get(f)
@@ -123,8 +125,9 @@ def get_ingredient_list():
 
     return ingredients
 
+
 def name_search(user_text):
-    f = f"https://www.thecocktaildb.com/api/json/v2/{api}/search.php?s="+str(user_text)
+    f = f"https://www.thecocktaildb.com/api/json/v2/{api}/search.php?s=" + str(user_text)
     data = json.loads(requests.get(f).text)
 
     cocktails = []
@@ -133,6 +136,7 @@ def name_search(user_text):
         cocktails.append(item['idDrink'])
 
     return cocktails
+
 
 def popular():
     f = f"https://www.thecocktaildb.com/api/json/v2/{api}/popular.php"
@@ -144,6 +148,7 @@ def popular():
         cocktails.append(item['idDrink'])
 
     return cocktails
+
 
 def new_drinks():
     f = f"https://www.thecocktaildb.com/api/json/v2/{api}/latest.php"
@@ -157,12 +162,12 @@ def new_drinks():
     return cocktails
 
 
-
 st.header("Shane’s Drink Recommender")
 
 ingredients = get_ingredient_list()
 
-radio = st.radio('', ('Search by Ingredients','Search by Cocktail Name', 'Newest Cocktails','Just Show Me Some Popular Cocktails'))
+radio = st.radio('', (
+'Search by Ingredients', 'Search by Cocktail Name', 'Newest Cocktails', 'Just Show Me Some Popular Cocktails'))
 
 if radio == 'Search by Cocktail Name':
     user_text = st.text_input('Cocktail Search', value='', max_chars=None, key=None, type='default')
@@ -174,8 +179,9 @@ elif radio == 'Search by Ingredients':
     user_choice = st.multiselect('Choose your ingredients:', ingredients, [])
 
     my_expander = st.beta_expander(' ')
-    mode = my_expander.radio('Search Mode', ('Drink must contain all ingredients','Return drinks with any combination of ingredients (slower)'))
-    non_alcoholic = my_expander.radio('Non-Alcoholic Only', ('Yes','No'),index=1)
+    mode = my_expander.radio('Search Mode', (
+    'Drink must contain all ingredients', 'Return drinks with any combination of ingredients (slower)'))
+    non_alcoholic = my_expander.radio('Non-Alcoholic Only', ('Yes', 'No'), index=1)
 
     if len(user_choice) != 0:
         if mode == 'Drink must contain all ingredients':
@@ -193,7 +199,7 @@ elif radio == 'Search by Ingredients':
 elif radio == 'Newest Cocktails':
     cocktails = new_drinks()
     get_drinks(cocktails)
-        
+
 else:
     cocktails = popular()
     get_drinks(cocktails)
