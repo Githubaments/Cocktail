@@ -130,12 +130,13 @@ def name_search(user_text):
     f = f"https://www.thecocktaildb.com/api/json/v2/{api}/search.php?s=" + str(user_text)
     data = json.loads(requests.get(f).text)
 
-    cocktails = []
-
-    if data["drinks"] == 'None Found':
+    if data["drinks"] == None:
         st.write("Sorry we can't find a cocktail with these ingredients.")
         st.stop()
 
+    cocktails = []
+
+        
     for item in (data["drinks"]):
         cocktails.append(item['idDrink'])
 
