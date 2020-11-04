@@ -132,6 +132,10 @@ def name_search(user_text):
 
     cocktails = []
 
+    if data["drinks"] == 'None Found':
+        st.write("Sorry we can't find a cocktail with these ingredients.")
+        st.stop()
+
     for item in (data["drinks"]):
         cocktails.append(item['idDrink'])
 
