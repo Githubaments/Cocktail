@@ -131,7 +131,7 @@ def name_search(user_text):
     data = json.loads(requests.get(f).text)
 
     if data["drinks"] == None:
-        st.write("Sorry we can't find a cocktail with these ingredients.")
+        st.write("Sorry we can't find a cocktail with that name.")
         st.stop()
 
     cocktails = []
