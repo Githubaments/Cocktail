@@ -59,7 +59,7 @@ def get_drinks(cocktails):
         f_cocktails = f"https://www.thecocktaildb.com/api/json/v2/{api}/lookup.php?i=" + item
         r_cocktails = json.loads(requests.get(f_cocktails).text)
 
-        st.image(r_cocktails['drinks'][0]['strDrinkThumb'])
+        st.image(r_cocktails['drinks'][0]['strDrinkThumb'],use_column_width=True)
         st.subheader(r_cocktails['drinks'][0]['strDrink'])
 
         for item in (range(1, 15)):
