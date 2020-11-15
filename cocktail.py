@@ -140,8 +140,6 @@ def whiskey(user_choice):
     if 'Whiskey' in user_choice:
         user_choice.extend(whiskeys)
 
-    st.write(user_choice)
-
     return user_choice
 
 def name_search(user_text):
