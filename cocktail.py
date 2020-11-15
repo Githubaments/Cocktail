@@ -126,6 +126,22 @@ def get_ingredient_list():
 
     return ingredients
 
+def whiskey(user_choice):
+    whiskeys = ['Irish Whiskey',
+                'Scotch',
+                'Blended Whiskey',
+                'Canadian Whisky',
+                'Rye Whiskey',
+                'Tennessee whiskey',
+                'whisky',
+                'whiskey',
+                'Cinnamon Whisky',
+                ]
+
+    if 'whiskey' in user_choice:
+        user_choice.extend(whiskeys)
+
+    return user_choice
 
 def name_search(user_text):
     f = f"https://www.thecocktaildb.com/api/json/v2/{api}/search.php?s=" + str(user_text)
@@ -182,6 +198,7 @@ if radio == 'Search by Cocktail Name':
 
 elif radio == 'Search by Ingredients':
     user_choice = st.multiselect('Choose your ingredients:', ingredients, [])
+    user_choice = whiskey(user_choice)
 
     my_expander = st.beta_expander(' ')
     mode = my_expander.radio('Search Mode', (
