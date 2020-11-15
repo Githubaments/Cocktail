@@ -59,7 +59,7 @@ def get_drinks(cocktails):
         f_cocktails = f"https://www.thecocktaildb.com/api/json/v2/{api}/lookup.php?i=" + item
         r_cocktails = json.loads(requests.get(f_cocktails).text)
 
-        st.image(r_cocktails['drinks'][0]['strDrinkThumb'],use_column_width=True)
+        st.image(r_cocktails['drinks'][0]['strDrinkThumb'])
         st.subheader(r_cocktails['drinks'][0]['strDrink'])
 
         for item in (range(1, 15)):
@@ -121,7 +121,8 @@ def get_ingredient_list():
         except Exception:
             pass
 
-    ingredients[6:] = sorted(ingredients[6:])
+    ingredients[4] = 'Whiskey'
+    ingredients[5:] = sorted(ingredients[5:])
 
     return ingredients
 
@@ -130,13 +131,12 @@ def name_search(user_text):
     f = f"https://www.thecocktaildb.com/api/json/v2/{api}/search.php?s=" + str(user_text)
     data = json.loads(requests.get(f).text)
 
-    if data["drinks"] == None:
-        st.write("Sorry we can't find a cocktail with that name.")
-        st.stop()
-
     cocktails = []
 
-        
+    if data["drinks"] == None:
+        st.write("Sorry we can't find a cocktail with these ingredients.")
+        st.stop()
+
     for item in (data["drinks"]):
         cocktails.append(item['idDrink'])
 
