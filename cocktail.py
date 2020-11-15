@@ -138,7 +138,7 @@ def whiskey(user_choice):
                 'Cinnamon Whisky',
                 ]
 
-    if 'whiskey' in user_choice:
+    if 'Whiskey' in user_choice:
         user_choice.extend(whiskeys)
 
     return user_choice
