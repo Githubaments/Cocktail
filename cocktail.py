@@ -121,7 +121,7 @@ def get_ingredient_list():
         except Exception:
             pass
 
-    ingredients[4] = 'Whiskey'
+    ingredients[4] = 'Whiskey'  #sotch
     ingredients[5:] = sorted(ingredients[5:])
 
     return ingredients
@@ -158,6 +158,24 @@ def name_search(user_text):
 
     return cocktails
 
+def whiskey(user_choice):
+    whiskeys = ['Irish Whiskey',
+                'Scotch',
+                'Blended Whiskey',
+                'Canadian Whisky',
+                'Rye Whiskey',
+                'Tennessee whiskey',
+                'whisky',
+                'whiskey',
+                'Cinnamon Whisky',
+                ]
+
+    if 'whiskey' in user_choice:
+        user_choice.extend(whiskeys)
+
+    st.print(user_choice)
+
+    return user_choice
 
 def popular():
     f = f"https://www.thecocktaildb.com/api/json/v2/{api}/popular.php"
