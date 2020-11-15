@@ -121,7 +121,8 @@ def get_ingredient_list():
         except Exception:
             pass
 
-    ingredients[6:] = sorted(ingredients[6:])
+    ingredients[4] = 'Whiskey'
+    ingredients[5:] = sorted(ingredients[5:])
 
     return ingredients
 
