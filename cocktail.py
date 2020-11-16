@@ -57,7 +57,7 @@ def get_drinks(cocktails):
         f_cocktails = f"https://www.thecocktaildb.com/api/json/v2/{api}/lookup.php?i=" + item
         r_cocktails = json.loads(requests.get(f_cocktails).text)
 
-        st.image(r_cocktails['drinks'][0]['strDrinkThumb'])
+        st.image(r_cocktails['drinks'][0]['strDrinkThumb'], width=700, use_column_width=True)
         st.subheader(r_cocktails['drinks'][0]['strDrink'])
 
         for item in (range(1, 15)):
@@ -148,6 +148,7 @@ def whiskey(user_choice):
                 'Scotch',
                 'Blended Scotch',
                 'Blended Whiskey',
+                'Bourbon',
                 'Canadian Whisky',
                 'Islay single malt Scotch',
                 'Rye Whiskey',
@@ -162,12 +163,13 @@ def whiskey(user_choice):
 
     return user_choice
 
-#@st.cache(suppress_st_warning=True, show_spinner=False, allow_output_mutation=True)
+@st.cache(suppress_st_warning=True, show_spinner=False, allow_output_mutation=True)
 def whiskey_strict(user_choice):
     whiskeys = ['Irish Whiskey',
                 'Scotch',
                 'Blended Scotch',
                 'Blended Whiskey',
+                'Bourbon',
                 'Canadian Whisky',
                 'Islay single malt Scotch',
                 'Rye Whiskey',
@@ -176,12 +178,20 @@ def whiskey_strict(user_choice):
                 'Whiskey',
                 'Cinnamon Whisky'
                 ]
-    whiskey_cocktails = []
+    cocktails = []
     if 'Whiskey' in user_choice:
+        user_choice.remove('Whiskey')
         for item in whiskeys:
-            whiskey_cocktails.extend(strict_ingredients([item]))
+            temp_list = user_choice.copy()
+            temp_list.append(item)
+            cocktails.extend(strict_ingredients(temp_list))
 
-    return whiskey_cocktails
+    else:
+        cocktails = strict_ingredients(user_choice)
+
+    cocktails = list(set(cocktails))
+
+    return cocktails
 
 
 def popular():
@@ -231,8 +241,7 @@ elif radio == 'Search by Ingredients':
 
     if len(user_choice) != 0:
         if mode == 'Drink must contain all ingredients':
-            cocktails = (whiskey_strict(user_choice))
-            cocktails.extend(strict_ingredients(user_choice))
+            cocktails = whiskey_strict(user_choice)
 
         else:
             user_choice = whiskey(user_choice)
