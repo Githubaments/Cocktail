@@ -7,13 +7,14 @@ import os
 api = (os.environ.get('api_key'))
 st.set_page_config(page_title='Drink Recommender')
 
+api = '9973533'
 
 def all_combinations(any_list):
     return itertools.chain.from_iterable(
         itertools.combinations(any_list, i + 1)
         for i in range(len(any_list)))
 
-
+@st.cache(suppress_st_warning=True, show_spinner=False, allow_output_mutation=True)
 def all_ingredients(x):
     my_combinations = list(all_combinations(x))
 
@@ -34,6 +35,7 @@ def all_ingredients(x):
 
 
 def strict_ingredients(x):
+
     user_ingredients = ','.join(map(str, x))
 
     f = f"https://www.thecocktaildb.com/api/json/v2/{api}/filter.php?i=" + user_ingredients
@@ -46,10 +48,6 @@ def strict_ingredients(x):
             cocktails.append(drink)
         except Exception:
             pass
-
-    if data["drinks"] == 'None Found':
-        st.write("Sorry we can't find a cocktail with these ingredients.")
-        st.stop()
 
     return (cocktails)
 
@@ -93,14 +91,14 @@ def get_drinks(cocktails):
 
 
 @st.cache(suppress_st_warning=True, show_spinner=False, allow_output_mutation=True)
-def filer_alcholic(cocktails):
+def filter_alcholic(cocktails):
     f = f"https://www.thecocktaildb.com/api/json/v2/{api}/filter.php?a=Non_Alcoholic"
     data = json.loads(requests.get(f).text)
 
     non_al = []
 
-    for item in (data["drinks"]):
-        non_al.append(data["drinks"][0]['idDrink'])
+    for index,item in enumerate(data["drinks"]):
+        non_al.append(data["drinks"][index]['idDrink'])
 
     cocktails = [x for x in cocktails if x in non_al]
 
@@ -110,6 +108,7 @@ def filer_alcholic(cocktails):
 @st.cache(suppress_st_warning=True, show_spinner=False, allow_output_mutation=True)
 def get_ingredient_list():
     f = f"https://www.thecocktaildb.com/api/json/v2/{api}/list.php?i=list"
+    st.write(f)
     data = requests.get(f)
     data = json.loads(data.text)
 
@@ -120,8 +119,10 @@ def get_ingredient_list():
             ingredients.append(ing)
         except Exception:
             pass
-
-    ingredients[4] = 'Whiskey'  #sotch
+    a = ingredients.index("Whiskey")
+    b = ingredients.index("Scotch")
+    ingredients[b] = 'Whiskey'
+    ingredients[a] = 'Scotch'
     ingredients[5:] = sorted(ingredients[5:])
 
     return ingredients
@@ -141,12 +142,14 @@ def name_search(user_text):
 
     return cocktails
 
+@st.cache(suppress_st_warning=True, show_spinner=False, allow_output_mutation=True)
 def whiskey(user_choice):
     whiskeys = ['Irish Whiskey',
                 'Scotch',
                 'Blended Scotch',
                 'Blended Whiskey',
                 'Canadian Whisky',
+                'Islay single malt Scotch',
                 'Rye Whiskey',
                 'Tennessee whiskey',
                 'Whisky',
@@ -159,23 +162,26 @@ def whiskey(user_choice):
 
     return user_choice
 
+#@st.cache(suppress_st_warning=True, show_spinner=False, allow_output_mutation=True)
 def whiskey_strict(user_choice):
     whiskeys = ['Irish Whiskey',
                 'Scotch',
                 'Blended Scotch',
                 'Blended Whiskey',
                 'Canadian Whisky',
+                'Islay single malt Scotch',
                 'Rye Whiskey',
                 'Tennessee whiskey',
                 'Whisky',
                 'Whiskey',
                 'Cinnamon Whisky'
                 ]
-
+    whiskey_cocktails = []
     if 'Whiskey' in user_choice:
-        whiskey_coctails = all_ingredients(whiskeys)
+        for item in whiskeys:
+            whiskey_cocktails.extend(strict_ingredients([item]))
 
-    return whiskey_coctails
+    return whiskey_cocktails
 
 
 def popular():
@@ -225,17 +231,23 @@ elif radio == 'Search by Ingredients':
 
     if len(user_choice) != 0:
         if mode == 'Drink must contain all ingredients':
-            cocktails = strict_ingredients(user_choice)
+            cocktails = (whiskey_strict(user_choice))
+            cocktails.extend(strict_ingredients(user_choice))
+
         else:
             user_choice = whiskey(user_choice)
             cocktails = all_ingredients(user_choice)
-            cocktails.extend(whiskey_strict(user_choice))
 
         if non_alcoholic == 'Yes':
-            cocktails = filer_alcholic(cocktails)
+            cocktails = filter_alcholic(cocktails)
             if len(cocktails) == 0:
                 st.write("Sorry we can't find a non-alcholic cocktail with these ingredients.")
                 st.stop()
+
+        if cocktails == 'None Found':
+            st.write("Sorry we can't find a cocktail with these ingredients.")
+            st.stop()
+
         get_drinks(cocktails)
 
 elif radio == 'Newest Cocktails':
