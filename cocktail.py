@@ -159,6 +159,25 @@ def whiskey(user_choice):
 
     return user_choice
 
+def whiskey_strict(user_choice):
+    whiskeys = ['Irish Whiskey',
+                'Scotch',
+                'Blended Scotch',
+                'Blended Whiskey',
+                'Canadian Whisky',
+                'Rye Whiskey',
+                'Tennessee whiskey',
+                'Whisky',
+                'Whiskey',
+                'Cinnamon Whisky'
+                ]
+
+    if 'Whiskey' in user_choice:
+        whiskey_coctails = all_ingredients(whiskeys)
+
+    return whiskey_coctails
+
+
 def popular():
     f = f"https://www.thecocktaildb.com/api/json/v2/{api}/popular.php"
     data = json.loads(requests.get(f).text)
@@ -198,7 +217,6 @@ if radio == 'Search by Cocktail Name':
 
 elif radio == 'Search by Ingredients':
     user_choice = st.multiselect('Choose your ingredients:', ingredients, [])
-    user_choice = whiskey(user_choice)
 
     my_expander = st.beta_expander('Options')
     mode = my_expander.radio('Search Mode', (
@@ -209,7 +227,9 @@ elif radio == 'Search by Ingredients':
         if mode == 'Drink must contain all ingredients':
             cocktails = strict_ingredients(user_choice)
         else:
+            user_choice = whiskey(user_choice)
             cocktails = all_ingredients(user_choice)
+            cocktails.extend(whiskey_strict(user_choice))
 
         if non_alcoholic == 'Yes':
             cocktails = filer_alcholic(cocktails)
