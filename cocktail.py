@@ -126,23 +126,6 @@ def get_ingredient_list():
 
     return ingredients
 
-def whiskey(user_choice):
-    whiskeys = ['Irish Whiskey',
-                'Scotch',
-                'Blended Whiskey',
-                'Canadian Whisky',
-                'Rye Whiskey',
-                'Tennessee whiskey',
-                'whisky',
-                'whiskey',
-                'Cinnamon Whisky'
-                ]
-
-    if 'Whiskey' in user_choice:
-        user_choice.extend(whiskeys)
-
-    return user_choice
-
 def name_search(user_text):
     f = f"https://www.thecocktaildb.com/api/json/v2/{api}/search.php?s=" + str(user_text)
     data = json.loads(requests.get(f).text)
@@ -165,15 +148,15 @@ def whiskey(user_choice):
                 'Canadian Whisky',
                 'Rye Whiskey',
                 'Tennessee whiskey',
-                'whisky',
-                'whiskey',
-                'Cinnamon Whisky',
+                'Whisky',
+                'Whiskey',
+                'Cinnamon Whisky'
                 ]
 
-    if 'whiskey' in user_choice:
+    if 'Whiskey' in user_choice:
         user_choice.extend(whiskeys)
 
-    st.print(user_choice)
+    #st.write(user_choice)
 
     return user_choice
 
@@ -218,7 +201,7 @@ elif radio == 'Search by Ingredients':
     user_choice = st.multiselect('Choose your ingredients:', ingredients, [])
     user_choice = whiskey(user_choice)
 
-    my_expander = st.beta_expander(' ')
+    my_expander = st.beta_expander('Options')
     mode = my_expander.radio('Search Mode', (
     'Drink must contain all ingredients', 'Return drinks with any combination of ingredients (slower)'))
     non_alcoholic = my_expander.radio('Non-Alcoholic Only', ('Yes', 'No'), index=1)
