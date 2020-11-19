@@ -5,7 +5,7 @@ import requests
 import os
 
 api = (os.environ.get('api_key'))
-st.set_page_config(page_title='Drink Recommender')
+st.set_page_config(page_title='Drink Recommender', page_icon="https://raw.githubusercontent.com/Githubaments/Images/main/favicon.ico")
 
 api = '9973533'
 
