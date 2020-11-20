@@ -106,7 +106,6 @@ def filter_alcholic(cocktails):
 @st.cache(suppress_st_warning=True, show_spinner=False, allow_output_mutation=True)
 def get_ingredient_list():
     f = f"https://www.thecocktaildb.com/api/json/v2/{api}/list.php?i=list"
-    st.write(f)
     data = requests.get(f)
     data = json.loads(data.text)
 
