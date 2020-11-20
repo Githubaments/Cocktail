@@ -7,8 +7,6 @@ import os
 api = (os.environ.get('api_key'))
 st.set_page_config(page_title='Drink Recommender', page_icon="https://raw.githubusercontent.com/Githubaments/Images/main/favicon.ico")
 
-api = '9973533'
-
 def all_combinations(any_list):
     return itertools.chain.from_iterable(
         itertools.combinations(any_list, i + 1)
